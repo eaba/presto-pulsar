@@ -1,2 +1,0 @@
-- name: Publish Docker
-  uses: elgohr/Publish-Docker-Github-Action@2.14
