@@ -1,18 +1,28 @@
 FROM openjdk:8-jre-slim
 
 ARG MIRROR="https://repo1.maven.org/maven2/com/facebook/presto"
-ARG PRESTO_VERSION="0.206"
+ARG PRESTO_VERSION="0.233.1"
 ARG PRESTO_BIN="${MIRROR}/presto-server/${PRESTO_VERSION}/presto-server-${PRESTO_VERSION}.tar.gz"
 ARG PRESTO_CLI_BIN="${MIRROR}/presto-cli/${PRESTO_VERSION}/presto-cli-${PRESTO_VERSION}-executable.jar"
 ARG PULSAR_MIRROR="https://archive.apache.org/dist/pulsar"
-ARG PULSAR_VERSION="2.4.2"
+ARG PULSAR_VERSION="2.5.0"
 ARG PRESTO_PULSAR_PLUGIN="${PULSAR_MIRROR}/pulsar-${PULSAR_VERSION}/apache-pulsar-${PULSAR_VERSION}-bin.tar.gz"
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y --allow-unauthenticated curl wget less && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+ && apt-get install -y --allow-unauthenticated \
+      curl \
+      wget \
+      less \
+      vim \
+      python3 \
+      python3-pip \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /usr/bin/python3 /usr/bin/python \
+ && pip3 install \
+      jinja2
 
 ENV PRESTO_HOME /presto
 ENV PRESTO_USER presto
@@ -44,15 +54,9 @@ RUN mkdir -p $PRESTO_HOME && \
     chmod +x presto && \
     chown -R ${PRESTO_USER}:${PRESTO_USER} $PRESTO_HOME
 
-# Need to work with python2
-# See: https://github.com/prestodb/presto/issues/4678
-ENV PYTHON2_DEBIAN_VERSION 2.7.16-1
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		python="${PYTHON2_DEBIAN_VERSION}" \
-	&& rm -rf /var/lib/apt/lists/* \
-    && cd /usr/local/bin \
-	&& rm -rf idle pydoc python python-config 
+COPY template_configs ${TEMPLATE_DEFAULT_DIR}
+COPY presto-entrypoint.py ${PRESTO_HOME}/presto-entrypoint.py
 
 USER $PRESTO_USER
 
-CMD ["launcher", "run"]
+CMD ["python3", "presto-entrypoint.py"]
