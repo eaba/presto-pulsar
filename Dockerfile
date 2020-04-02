@@ -55,7 +55,7 @@ RUN mkdir -p $PRESTO_HOME && \
     chown -R ${PRESTO_USER}:${PRESTO_USER} $PRESTO_HOME
 
 COPY template_configs ${TEMPLATE_DEFAULT_DIR}
-COPY presto-entrypoint.py ${PRESTO_HOME}/presto-entrypoint.py
+COPY presto-entrypoint.py ${PRESTO_HOME}
 
 USER $PRESTO_USER
 
