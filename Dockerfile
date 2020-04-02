@@ -59,4 +59,8 @@ COPY presto-entrypoint.py ${PRESTO_HOME}
 
 USER $PRESTO_USER
 
+WORKDIR ${PRESTO_HOME}
+
+EXPOSE 8080
+
 CMD ["python3", "presto-entrypoint.py"]
