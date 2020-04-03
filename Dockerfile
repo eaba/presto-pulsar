@@ -10,12 +10,6 @@ ARG PRESTO_PULSAR_PLUGIN="${PULSAR_MIRROR}/pulsar-${PULSAR_VERSION}/apache-pulsa
 
 USER root
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		python="${PYTHON2_DEBIAN_VERSION}" \
-	&& rm -rf /var/lib/apt/lists/* \
-    && cd /usr/local/bin \
-	&& rm -rf idle pydoc python python-config 
-
 RUN apt-get update \
      && apt-get install -y netcat dnsutils less procps iputils-ping \
                  python2.7 python-setuptools python-yaml python-kazoo \
