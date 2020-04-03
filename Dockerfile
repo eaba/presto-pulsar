@@ -48,7 +48,7 @@ RUN mkdir -p $PRESTO_HOME && \
     tar xzf apache-pulsar-${PULSAR_VERSION}-bin.tar.gz && \
     rm -rf apache-pulsar-${PULSAR_VERSION}-bin.tar.gz && \
     mv apache-pulsar-${PULSAR_VERSION}/lib/presto/plugin/pulsar-presto-connector $PRESTO_HOME/plugin && \
-    rm -rf apache-pulsar-${PULSAR_VERSION}
+    rm -rf apache-pulsar-${PULSAR_VERSION} && \
     cd ${PRESTO_HOME}/bin && \
     wget --quiet ${PRESTO_CLI_BIN} && \
     mv presto-cli-${PRESTO_VERSION}-executable.jar presto && \
