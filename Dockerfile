@@ -28,6 +28,11 @@ ENV PRESTO_USER presto
 ENV PRESTO_CONF_DIR ${PRESTO_HOME}/etc
 ENV PATH $PATH:$PRESTO_HOME/bin
 
+RUN useradd \
+        --create-home \
+        --home-dir ${PRESTO_HOME} \
+        --shell /bin/bash \
+        $PRESTO_USER
 
 RUN mkdir -p $PRESTO_HOME && \
     wget --quiet $PRESTO_BIN && \
@@ -43,7 +48,7 @@ RUN mkdir -p $PRESTO_HOME && \
     chmod +x presto && \
     chown -R ${PRESTO_USER}:${PRESTO_USER} $PRESTO_HOME
 
-USER root
+USER $PRESTO_USER
 
 CMD ["launcher", "run"]
 
