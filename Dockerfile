@@ -1,6 +1,5 @@
 FROM openjdk:8-jdk-slim
 
-ENV PYTHON2_DEBIAN_VERSION 2.7.16-1
 ARG MIRROR="https://repo1.maven.org/maven2/com/facebook/presto"
 ARG PRESTO_VERSION="0.233.1"
 ARG PRESTO_BIN="${MIRROR}/presto-server/${PRESTO_VERSION}/presto-server-${PRESTO_VERSION}.tar.gz"
@@ -18,17 +17,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf idle pydoc python python-config 
 
 RUN apt-get update \
- && apt-get install -y --allow-unauthenticated \
-      curl \
-      wget \
-      less \
-      vim \
-      python3 \
-      python3-pip \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* \
- && ln -s /usr/bin/python3 /usr/bin/python \
- && pip3 install  jinja2
+     && apt-get install -y netcat dnsutils less procps iputils-ping \
+                 python2.7 python-setuptools python-yaml python-kazoo \
+                 python3.7 python3-setuptools python3-yaml python3-kazoo \
+                 libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev \
+                 curl \
+                 vim \
+                 wget \
+                 less \
+     && apt-get clean \
+     && rm -rf /var/lib/apt/lists/*
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python2.7 get-pip.py
+RUN python3.7 get-pip.py
+RUN pip3 install  jinja2
 ENV PRESTO_HOME /presto
 ENV PRESTO_USER presto
 ENV PRESTO_DATA_DIR ${PRESTO_HOME}/data
