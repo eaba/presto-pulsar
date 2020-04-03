@@ -76,4 +76,4 @@ WORKDIR ${PRESTO_HOME}
 
 EXPOSE 8080
 
-CMD ["python3", "presto-entrypoint.py"]
+#CMD ["python3", "presto-entrypoint.py"]

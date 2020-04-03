@@ -199,8 +199,8 @@ def run():
     print('\n\n============== BOOTSTRAPPING ==============')
     bootstrap(arguments)
 
-    print('\n\n============== LAUNCHING ==============')
-    launch(arguments)
+    # print('\n\n============== LAUNCHING ==============')
+    # launch(arguments)
 
 
 if __name__ == '__main__':
