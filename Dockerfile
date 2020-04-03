@@ -1,5 +1,6 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:8-jdk-slim
 
+ENV PYTHON2_DEBIAN_VERSION 2.7.13-2
 ARG MIRROR="https://repo1.maven.org/maven2/com/facebook/presto"
 ARG PRESTO_VERSION="0.233.1"
 ARG PRESTO_BIN="${MIRROR}/presto-server/${PRESTO_VERSION}/presto-server-${PRESTO_VERSION}.tar.gz"
@@ -9,6 +10,12 @@ ARG PULSAR_VERSION="2.5.0"
 ARG PRESTO_PULSAR_PLUGIN="${PULSAR_MIRROR}/pulsar-${PULSAR_VERSION}/apache-pulsar-${PULSAR_VERSION}-bin.tar.gz"
 
 USER root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		python="${PYTHON2_DEBIAN_VERSION}" \
+	&& rm -rf /var/lib/apt/lists/* \
+    && cd /usr/local/bin \
+	&& rm -rf idle pydoc python python-config 
 
 RUN apt-get update \
  && apt-get install -y --allow-unauthenticated \
@@ -21,9 +28,7 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && ln -s /usr/bin/python3 /usr/bin/python \
- && pip3 install \
-      jinja2
-
+ && pip3 install  jinja2
 ENV PRESTO_HOME /presto
 ENV PRESTO_USER presto
 ENV PRESTO_DATA_DIR ${PRESTO_HOME}/data
