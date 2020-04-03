@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-slim
 
-ENV PYTHON2_DEBIAN_VERSION 2.7.13-2
+ENV PYTHON2_DEBIAN_VERSION 2.7.16-1
 ARG MIRROR="https://repo1.maven.org/maven2/com/facebook/presto"
 ARG PRESTO_VERSION="0.233.1"
 ARG PRESTO_BIN="${MIRROR}/presto-server/${PRESTO_VERSION}/presto-server-${PRESTO_VERSION}.tar.gz"
