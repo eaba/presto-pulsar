@@ -44,7 +44,6 @@ RUN mkdir -p $PRESTO_HOME && \
     mv presto-server-${PRESTO_VERSION}/* $PRESTO_HOME && \
     rm -rf presto-server-${PRESTO_VERSION} && \
     mkdir -p ${PRESTO_CONF_DIR}/catalog/ && \
-    mkdir -p ${PRESTO_CONF_DIR}/data/etc/catalog/ && \
     mkdir -p ${PRESTO_HOME}/data && \
     wget --quiet $PRESTO_PULSAR_PLUGIN && \
     tar xzf apache-pulsar-${PULSAR_VERSION}-bin.tar.gz && \
