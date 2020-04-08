@@ -1,14 +1,8 @@
 FROM openjdk:8-jre-slim
 
-ARG MIRROR="https://repo1.maven.org/maven2/com/facebook/presto"
-ARG PRESTO_VERSION="0.206"
-ARG PRESTO_BIN="${MIRROR}/presto-server/${PRESTO_VERSION}/presto-server-${PRESTO_VERSION}.tar.gz"
-ARG PRESTO_CLI_BIN="${MIRROR}/presto-cli/${PRESTO_VERSION}/presto-cli-${PRESTO_VERSION}-executable.jar"
-
 ARG PULSAR_MIRROR="https://archive.apache.org/dist/pulsar"
-ARG PULSAR_VERSION="2.6.0-98344a711"
-ARG PRESTO_PULSAR_PLUGIN="https://github.com/streamnative/pulsar/releases/download/v2.6.0-98344a711/apache-pulsar-2.6.0-98344a711-bin.tar.gz"
-#="${PULSAR_MIRROR}/pulsar-${PULSAR_VERSION}/apache-pulsar-${PULSAR_VERSION}-bin.tar.gz"
+ARG PULSAR_VERSION="2.5.0"
+ARG PULSAR_BIN="${PULSAR_MIRROR}/pulsar-${PULSAR_VERSION}/apache-pulsar-${PULSAR_VERSION}-bin.tar.gz"
 USER root
 
 RUN apt-get update \
@@ -27,37 +21,25 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python2.7 get-pip.py
 RUN python3.7 get-pip.py
 
-ENV PRESTO_HOME /presto
-ENV PRESTO_USER presto
-ENV PRESTO_CONF_DIR ${PRESTO_HOME}/etc
-ENV PATH $PATH:$PRESTO_HOME/bin
+ENV PULSAR_HOME /pulsar
+ENV PULSAR_USER pulsar
 
 RUN useradd \
         --create-home \
-        --home-dir ${PRESTO_HOME} \
+        --home-dir ${PULSAR_HOME} \
         --shell /bin/bash \
-        $PRESTO_USER
+        $PULSAR_USER
 
-RUN mkdir -p $PRESTO_HOME && \
-    wget --quiet $PRESTO_BIN && \
-    tar xzf presto-server-${PRESTO_VERSION}.tar.gz && \
-    rm -rf presto-server-${PRESTO_VERSION}.tar.gz && \
-    mv presto-server-${PRESTO_VERSION}/* $PRESTO_HOME && \
-    rm -rf presto-server-${PRESTO_VERSION} && \
-    mkdir -p ${PRESTO_CONF_DIR}/catalog/ && \
-    mkdir -p ${PRESTO_HOME}/data && \
-    wget --quiet $PRESTO_PULSAR_PLUGIN && \
+RUN mkdir -p $PULSAR_HOME && \
+    wget --quiet $PULSAR_BIN && \
     tar xzf apache-pulsar-${PULSAR_VERSION}-bin.tar.gz && \
     rm -rf apache-pulsar-${PULSAR_VERSION}-bin.tar.gz && \
-    mv apache-pulsar-${PULSAR_VERSION}/lib/presto/plugin/pulsar-presto-connector $PRESTO_HOME/plugin && \
+    mv apache-pulsar-${PULSAR_VERSION}/* $PULSAR_HOME && \
     rm -rf apache-pulsar-${PULSAR_VERSION} && \
-    cd ${PRESTO_HOME}/bin && \
-    wget --quiet ${PRESTO_CLI_BIN} && \
-    mv presto-cli-${PRESTO_VERSION}-executable.jar presto && \
-    chmod +x presto && \
-    chown -R ${PRESTO_USER}:${PRESTO_USER} $PRESTO_HOME
+    mkdir -p $PULSAR_HOME/custom && \
+    chown -R ${PULSAR_USER}:${PULSAR_USER} $PULSAR_HOME
 
-USER $PRESTO_USER
+USER $PULSAR_USER
 
 CMD ["launcher", "run"]
 
