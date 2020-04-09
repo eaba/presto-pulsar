@@ -27,6 +27,6 @@ stages:
         repository: 'eabanonu/presto-pulsar'
         command: 'buildAndPush'
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: v0.1.0
+        tags: v0.1.1
     
         

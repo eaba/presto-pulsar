@@ -40,6 +40,6 @@ RUN mkdir -p $PULSAR_HOME && \
     chown -R ${PULSAR_USER}:${PULSAR_USER} $PULSAR_HOME
 
 USER $PULSAR_USER
+WORKDIR /pulsar
 
-CMD ["launcher", "run"]
 
